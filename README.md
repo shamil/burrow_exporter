@@ -1,36 +1,21 @@
-# burrow-exporter
+# Prometheus Burrow Exporter
 
-A simple prometheus exporter for gathering Kafka consumer group info
-from [burrow](https://github.com/linkedin/Burrow).
+A prometheus exporter for gathering Kafka consumer group info from [Burrow](https://github.com/linkedin/Burrow).
 
+This project is a hard-fork of [jirwin/burrow_exporter](https://github.com/jirwin/burrow_exporter).
+
+It was largely refactored with the following changes:
+
+- Uses custom collector implementation, to avoid scraping periodically
+- By using custom collector, stale metrics are automatically removed from output
+- Reorganized with prometheus recommended project structure
+- Using [`promu`](https://github.com/prometheus/promu) tool to build project
+- Using prometheus recommended libraries for `logger` and `flags`
+- Migrated to Go modules from Glide
 
 ## Run with Docker
 
-### required environment variables
-#### BURROW_ADDR
-A burrow address is required. Default: http://localhost:8000
-#### METRICS_ADDR
-An address to run prometheus on is required. Default: 0.0.0.0:8080
-#### INTERVAL
-A scrape interval is required. Default: 30
-
-#### API_VERSION
-Burrow API version to leverage (default: 2)
-
-### Example
-
-```sh
-# build docker image
-docker build -t burrow_exporter .
-
-# with env variables
-docker run -d -p 8080:8080 \
-  -e BURROW_ADDR="http://localhost:8000" \
-  -e METRICS_ADDR="0.0.0.0:8080" \
-  -e INTERVAL="30" \
-  -e API_VERSION="2" \
-  burrow_exporter
-# with custom command
-docker run -d -p 8080:8080 burrow_exporter ./burrow-exporter --burrow-addr http://localhost:8000 --metrics-addr 0.0.0.0:8080 --interval 30 --api-version 2
-
+```shell
+docker run -p 8237:8237 simenduev/burrow-exporter \
+  --burrow.address http://localhost:8000
 ```
