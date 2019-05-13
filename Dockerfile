@@ -1,16 +1,17 @@
-FROM golang:alpine as glide
-RUN apk update
-RUN apk add git
-RUN go get github.com/Masterminds/glide
-WORKDIR /go/src/github.com/jirwin/burrow_exporter
-COPY . /go/src/github.com/jirwin/burrow_exporter
-RUN glide install
-RUN go build burrow-exporter.go
+FROM golang:1.12-alpine AS builder
 
-FROM alpine
-COPY --from=glide /go/src/github.com/jirwin/burrow_exporter/burrow-exporter .
-ENV BURROW_ADDR http://localhost:8000
-ENV METRICS_ADDR 0.0.0.0:8080
-ENV INTERVAL 30
-ENV API_VERSION 2
-CMD ./burrow-exporter --burrow-addr $BURROW_ADDR --metrics-addr $METRICS_ADDR --interval $INTERVAL --api-version $API_VERSION
+ARG promu_version=0.4.0
+
+RUN apk --no-cache add git \
+    && wget -qO- https://github.com/prometheus/promu/releases/download/v${promu_version}/promu-${promu_version}.linux-amd64.tar.gz | tar -xzvf - -C /opt \
+    && ln -s /opt/promu-0.4.0.linux-amd64/promu /usr/local/bin/promu
+
+WORKDIR /src/burrow_exporter
+COPY . .
+RUN promu build
+
+FROM busybox
+LABEL maintainer "Alex Simenduev <shamil.si@gmail.com>"
+
+COPY --from=builder /src/burrow_exporter/burrow_exporter /usr/local/bin/
+ENTRYPOINT ["burrow_exporter"]
