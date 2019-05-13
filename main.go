@@ -19,8 +19,8 @@ func main() {
 	var (
 		listenAddress            = kingpin.Flag("web.listen-address", "Address to listen on for web interface and telemetry.").Short('l').Default(":8237").String()
 		metricsPath              = kingpin.Flag("web.telemetry-path", "Path under which to expose metrics.").Default("/metrics").String()
-		burrowAddress            = kingpin.Flag("burrow.address", "Burrow API address.").Default("http://localhost:8000").Envar("BURROW_ADDR").String()
-		burrowAPIVersion         = kingpin.Flag("burrow.api-version", "Burrow API version to leverage.").Default("3").Envar("BURROW_API_VERSION").Int()
+		burrowAddress            = kingpin.Flag("burrow.address", "Burrow API address.").Default("http://localhost:8000").String()
+		burrowAPIVersion         = kingpin.Flag("burrow.api-version", "Burrow API version to leverage.").Default("3").Int()
 		collectorDisabledMetrics = kingpin.Flag("collector.disabled-metrics", "Comma separated list of metrics to disable (one of: consumer-status, partition-current-offset, partition-lag, partition-max-offset, partition-status, topic-partition-offset, total-lag).").Default("").String()
 	)
 
