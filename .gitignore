@@ -12,6 +12,6 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 
-burrow-exporter
-dist/
-vendor/
+# promu related
+burrow_exporter
+burrow_exporter-*.tar.gz

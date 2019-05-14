@@ -3,6 +3,7 @@ package exporter
 import (
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -31,7 +32,9 @@ var (
 )
 
 type Collector struct {
-	client                     *BurrowClient
+	client *BurrowClient
+	mutex  sync.Mutex
+
 	skipPartitionStatus        bool
 	skipConsumerStatus         bool
 	skipPartitionLag           bool
@@ -209,7 +212,10 @@ func (c *Collector) Describe(ch chan<- *prometheus.Desc) {
 // Collect implements prometheus.Collector.
 func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 	start := time.Now()
+	c.mutex.Lock()
+
 	defer func() {
+		c.mutex.Unlock()
 		log.Infof("Finished scraping burrow, took %v.", time.Now().Sub(start))
 	}()
 
