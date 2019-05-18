@@ -13,5 +13,7 @@
 *.out
 
 # promu related
+.build
+.tarballs
 burrow_exporter
-burrow_exporter-*.tar.gz
+
