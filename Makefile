@@ -3,7 +3,12 @@ PREFIX ?= $(shell pwd)
 
 .PHONY: build
 build:
-	@go build -o $(PREFIX)/burrow_exporter
+	@command -v promu >/dev/null || { \
+		echo ">> installing promu"; \
+		GO111MODULE=off GOOS= GOARCH= go get -u github.com/prometheus/promu; \
+	}
+
+	@promu build --prefix $(PREFIX)
 
 .PHONY: crossbuild
 crossbuild:
