@@ -61,6 +61,7 @@ type ConsumerGroupStatus struct {
 	MaxLag     Partition   `json:"maxlag"`
 	Partitions []Partition `json:"partitions"`
 	TotalLag   int64       `json:"totallag"`
+	Owner      string      `json:"owner"`
 }
 
 type Partition struct {
@@ -70,6 +71,7 @@ type Partition struct {
 	Start      Offset `json:"start"`
 	End        Offset `json:"end"`
 	CurrentLag int64  `json:"current_lag"`
+	Owner      string `json:"owner"`
 }
 
 type ConsumerGroupStatusResp struct {

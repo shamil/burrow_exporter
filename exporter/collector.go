@@ -22,10 +22,10 @@ var Status = map[string]int{
 }
 
 var (
-	kafkaConsumerPartitionLagDesc           = prometheus.NewDesc("kafka_burrow_partition_lag", "The lag of the latest offset commit on a partition as reported by burrow.", []string{"cluster", "group", "topic", "partition"}, nil)
-	kafkaConsumerPartitionCurrentOffsetDesc = prometheus.NewDesc("kafka_burrow_partition_current_offset", "The latest offset commit on a partition as reported by burrow.", []string{"cluster", "group", "topic", "partition"}, nil)
-	kafkaConsumerPartitionCurrentStatusDesc = prometheus.NewDesc("kafka_burrow_partition_status", "The status of a partition as reported by burrow.", []string{"cluster", "group", "topic", "partition"}, nil)
-	kafkaConsumerPartitionMaxOffsetDesc     = prometheus.NewDesc("kafka_burrow_partition_max_offset", "The log end offset on a partition as reported by burrow.", []string{"cluster", "group", "topic", "partition"}, nil)
+	kafkaConsumerPartitionLagDesc           = prometheus.NewDesc("kafka_burrow_partition_lag", "The lag of the latest offset commit on a partition as reported by burrow.", []string{"cluster", "group", "topic", "owner", "partition"}, nil)
+	kafkaConsumerPartitionCurrentOffsetDesc = prometheus.NewDesc("kafka_burrow_partition_current_offset", "The latest offset commit on a partition as reported by burrow.", []string{"cluster", "group", "topic", "owner", "partition"}, nil)
+	kafkaConsumerPartitionCurrentStatusDesc = prometheus.NewDesc("kafka_burrow_partition_status", "The status of a partition as reported by burrow.", []string{"cluster", "group", "topic", "owner", "partition"}, nil)
+	kafkaConsumerPartitionMaxOffsetDesc     = prometheus.NewDesc("kafka_burrow_partition_max_offset", "The log end offset on a partition as reported by burrow.", []string{"cluster", "group", "topic", "owner", "partition"}, nil)
 	kafkaConsumerTotalLagDesc               = prometheus.NewDesc("kafka_burrow_total_lag", "The total amount of lag for the consumer group as reported by burrow.", []string{"cluster", "group"}, nil)
 	kafkaConsumerStatusDesc                 = prometheus.NewDesc("kafka_burrow_status", "The status of a partition as reported by burrow.", []string{"cluster", "group"}, nil)
 	kafkaTopicPartitionOffsetDesc           = prometheus.NewDesc("kafka_burrow_topic_partition_offset", "The latest offset on a topic's partition as reported by burrow.", []string{"cluster", "topic", "partition"}, nil)
@@ -55,7 +55,7 @@ func (c *Collector) processGroup(cluster, group string) (metrics []prometheus.Me
 
 	for _, partition := range resp.Status.Partitions {
 
-		labels := append(commonLabels, partition.Topic, strconv.Itoa(int(partition.Partition)))
+		labels := append(commonLabels, partition.Topic, partition.Owner, strconv.Itoa(int(partition.Partition)))
 
 		if !c.skipPartitionLag {
 			metric, err := prometheus.NewConstMetric(
@@ -251,3 +251,4 @@ func NewCollector(burrowUrl string, apiVersion int, disabledMetrics string) *Col
 		skipTopicPartitionOffset:   disabledMetricsSet["topic-partition-offset"],
 	}
 }
+
