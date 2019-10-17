@@ -19,7 +19,7 @@ var Status = map[string]int{
 	"STOP":     5,
 	"STALL":    6,
 	"REWIND":   7,
-} 
+}
 
 var (
 	kafkaConsumerPartitionLagDesc           = prometheus.NewDesc("kafka_burrow_partition_lag", "The lag of the latest offset commit on a partition as reported by burrow.", []string{"cluster", "group", "topic", "owner", "partition"}, nil)

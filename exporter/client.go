@@ -41,7 +41,7 @@ type TopicsResp struct {
 	BurrowResp
 	Topics []string `json:"topics"`
 }
- 
+
 type ConsumerGroupTopicDetailsResp struct {
 	BurrowResp
 	Offsets []int64 `json:"offsets"`
