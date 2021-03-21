@@ -1,5 +1,7 @@
 # Prometheus Burrow Exporter
 
+> **This repository is no longer maintained as since `burrow` version [1.3.4](https://github.com/linkedin/Burrow/blob/19e69e60045af8ddcbfc6474f37180d54f1fa6f9/CHANGELOG.md#134) there is native support for `prometheus` metrics.**
+
 A Prometheus Exporter for gathering Kafka consumer group info from [Burrow](https://github.com/linkedin/Burrow).
 
 This project is a hard-fork of [jirwin/burrow_exporter](https://github.com/jirwin/burrow_exporter).
